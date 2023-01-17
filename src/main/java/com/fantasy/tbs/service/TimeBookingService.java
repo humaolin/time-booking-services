@@ -2,6 +2,9 @@ package com.fantasy.tbs.service;
 
 import com.fantasy.tbs.domain.TimeBookDTO;
 import com.fantasy.tbs.domain.TimeBooking;
+import com.fantasy.tbs.domain.TimeWorkDTO;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,4 +56,14 @@ public interface TimeBookingService {
      * @param timeBookDTO
      */
     void bookTime(TimeBookDTO timeBookDTO);
+
+    /**
+     * calculate working hours between start and end
+     *
+     * @param pernsonNumber
+     * @param start
+     * @param end
+     * @return
+     */
+    Optional<TimeWorkDTO> calc(String pernsonNumber, ZonedDateTime start, ZonedDateTime end);
 }

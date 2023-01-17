@@ -2,15 +2,20 @@ package com.fantasy.tbs.service.impl;
 
 import com.fantasy.tbs.domain.TimeBookDTO;
 import com.fantasy.tbs.domain.TimeBooking;
+import com.fantasy.tbs.domain.TimeWorkDTO;
 import com.fantasy.tbs.repository.TimeBookingRepository;
 import com.fantasy.tbs.service.TimeBookingService;
 import com.fantasy.tbs.service.mapper.TimeBookMapper;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link TimeBooking}.
@@ -79,5 +84,20 @@ public class TimeBookingServiceImpl implements TimeBookingService {
     @Override
     public void bookTime(TimeBookDTO timeBookDTO) {
         timeBookingRepository.save(timeBookMapper.toTimeBooking(timeBookDTO));
+    }
+
+    @Override
+    public Optional<TimeWorkDTO> calc(String pernsonNumber, ZonedDateTime start, ZonedDateTime end) {
+        List<TimeBooking> byPersonalNumberAndBookingBetween = timeBookingRepository.findByPersonalNumberAndBookingBetween(pernsonNumber, start, end);
+        List<TimeBooking> collect = byPersonalNumberAndBookingBetween.stream().sorted((o1, o2) -> o1.getBooking().compareTo(o2.getBooking())).collect(Collectors.toList());
+        TimeBooking timeBookingStart = collect.get(0);
+        TimeBooking timeBookingEnd = collect.get(collect.size() - 1);
+        Duration duration = Duration.between(timeBookingStart.getBooking(), timeBookingEnd.getBooking());
+        double hours = duration.getSeconds() / 60.0/60.0;
+        TimeWorkDTO timeWorkDTO = new TimeWorkDTO();
+        timeWorkDTO.setTimeStamp(start);
+        timeWorkDTO.setPersonalNumber(pernsonNumber);
+        timeWorkDTO.setWorkHours(hours);
+        return Optional.of(timeWorkDTO);
     }
 }

@@ -332,6 +332,17 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.3</version>
+        </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
@@ -444,6 +455,11 @@
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-configuration-processor</artifactId>
                                 <version>${spring-boot.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.24</version>
                             </path>
                             <path>
                                 <groupId>org.mapstruct</groupId>
@@ -652,6 +668,11 @@
                             <groupId>com.h2database</groupId>
                             <artifactId>h2</artifactId>
                             <version>${h2.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>pl.project13.maven</groupId>
+                            <artifactId>git-commit-id-plugin</artifactId>
+                            <version>4.9.10</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -901,6 +922,18 @@
                     <plugin>
                         <groupId>pl.project13.maven</groupId>
                         <artifactId>git-commit-id-plugin</artifactId>
+                        <version>4.9.10</version>
+                        <executions>
+                            <execution>
+                                <id>get-the-git-infos</id>
+                                <!-- 默认绑定阶段initialize -->
+                                <phase>initialize</phase>
+                                <goals>
+                                    <!-- 目标：revision -->
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
